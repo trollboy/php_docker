@@ -43,3 +43,54 @@ services:
             options:
                 max-size: 1g
         image: nginx
+
+    php7:
+        ports:
+            - '80:80'
+        restart: always
+        logging:
+            options:
+                max-size: 1g
+        build:
+          context: ./
+          dockerfile: ./docker/php7.dockerfile 
+
+
+    php7-dev:
+        ports:
+            - '80:80'
+        volumes:
+            - ./app:/app
+            - ./configs:/configs
+        restart: always
+        logging:
+            options:
+                max-size: 1g
+        build:
+          context: ./
+          dockerfile: ./docker/php7.dockerfile 
+
+    php8:
+        ports:
+            - '80:80'
+        restart: always
+        logging:
+            options:
+                max-size: 1g
+        build:
+          context: ./
+          dockerfile: docker/php8.dockerfile 
+
+    php8-dev:
+        ports:
+            - '80:80'
+        volumes:
+            - ./app:/app
+            - ./configs:/configs
+        restart: always
+        logging:
+            options:
+                max-size: 1g
+        build:
+          context: ./
+          dockerfile: docker/php8.dockerfile 
