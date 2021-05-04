@@ -1,6 +1,6 @@
 version: '3.3'
 services:
-    redis:
+    redis: 
         ports:
             - '80:80'
         volumes:
@@ -44,7 +44,7 @@ services:
                 max-size: 1g
         image: nginx
 
-    php7:
+    php7: &php7
         ports:
             - '80:80'
         restart: always
@@ -55,22 +55,13 @@ services:
           context: ./
           dockerfile: ./docker/php7.dockerfile 
 
-
-    php7-dev:
-        ports:
-            - '80:80'
+    php7-dev: &php7-dev
+        <<: *php7
         volumes:
             - ./app:/app
-            - ./configs:/configs
-        restart: always
-        logging:
-            options:
-                max-size: 1g
-        build:
-          context: ./
-          dockerfile: ./docker/php7.dockerfile 
+            - ./configs:/configs 
 
-    php8:
+    php8: &php8
         ports:
             - '80:80'
         restart: always
@@ -81,16 +72,96 @@ services:
           context: ./
           dockerfile: docker/php8.dockerfile 
 
-    php8-dev:
-        ports:
-            - '80:80'
+    php8-dev: &php8-dev
+        <<: *php8
         volumes:
             - ./app:/app
-            - ./configs:/configs
-        restart: always
-        logging:
-            options:
-                max-size: 1g
-        build:
-          context: ./
-          dockerfile: docker/php8.dockerfile 
+            - ./configs:/configs 
+
+    php7-mysql:
+        <<: *php7
+        depends_on:
+            - mysql
+
+    php8-mysql:
+        <<: *php8
+        depends_on:
+            - mysql
+
+    php7-mssql:
+        <<: *php7
+        depends_on:
+            - mssql
+
+    php8-mssql:
+        <<: *php8
+        depends_on:
+            - mssql
+
+    php7-redis:
+        <<: *php7
+        depends_on:
+            - redis
+
+    php8-redis:
+        <<: *php8
+        depends_on:
+            - redis
+
+    php7-memcache:
+        <<: *php7
+        depends_on:
+            - memcache
+
+    php8-memcache:
+        <<: *php8
+        depends_on:
+            - memcache
+
+    php7-memcache-mysql:
+        <<: *php7
+        depends_on:
+            - mysql
+            - memcache
+
+    php8-memcache-mysql:
+        <<: *php8
+        depends_on:
+            - mysql
+            - memcache
+
+    php7-redis-mysql:
+        <<: *php7
+        depends_on:
+            - mysql
+            - redis
+
+    php8-redis-mysql:
+        <<: *php8
+        depends_on:
+            - mysql
+            - redis
+
+    php7-memcache-mssql:
+        <<: *php7
+        depends_on:
+            - mssql
+            - memcache
+
+    php8-memcache-mssql:
+        <<: *php8
+        depends_on:
+            - mssql
+            - memcache
+
+    php7-redis-mssql:
+        <<: *php7
+        depends_on:
+            - mssql
+            - redis
+
+    php8-redis-mssql:
+        <<: *php8
+        depends_on:
+            - mssql
+            - redis
